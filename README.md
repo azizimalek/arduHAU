@@ -25,7 +25,8 @@ It is continually being expanded to provide support for new emerging vehicle typ
 
 ## The ArduPilot project is made up of: ##
 
-- ArduCopter: [code](https://github.com/ArduPilot/ardupilot/tree/master/ArduCopter), [wiki](https://ardupilot.org/copter/index.html)
+### From official project: ###
+- ArduCopter (or APM:Copter) : [code](https://github.com/ArduPilot/ardupilot/tree/master/ArduCopter), [wiki](http://ardupilot.org/copter/index.html)
 
 - ArduPlane: [code](https://github.com/ArduPilot/ardupilot/tree/master/ArduPlane), [wiki](https://ardupilot.org/plane/index.html)
 
@@ -35,7 +36,7 @@ It is continually being expanded to provide support for new emerging vehicle typ
 
 - Antenna Tracker : [code](https://github.com/ArduPilot/ardupilot/tree/master/AntennaTracker), [wiki](https://ardupilot.org/antennatracker/index.html)
 
-## User Support & Discussion Forums ##
+### Custom Specialized Firmware ###
 
 - Support Forum: <https://discuss.ardupilot.org/>
 
@@ -161,3 +162,8 @@ for reviewing patches on their specific area.
   - ***Subsystem***: ESP32,AP_HAL_ESP32
 - [Charles Villard ](https://github.com/Silvanosky):
   - ***Subsystem***: ESP32,AP_HAL_ESP32
+- ArduHAU (Hybrid Airship UAV) : [code](https://github.com/azizimalek/arduSpace/tree/master/ArduHAU), [wiki]()
+
+## Further information ##
+- Refer official ArduPilot GitHub page <https://github.com/ArduPilot/ardupilot/>
+
