@@ -131,6 +131,7 @@ public:
     void                set_throttle_filter_cutoff(float filt_hz) { _throttle_filter.set_cutoff_frequency(filt_hz); }
     void                set_forward(float forward_in) { _forward_in = forward_in; }; // range -1 ~ +1
     void                set_lateral(float lateral_in) { _lateral_in = lateral_in; };     // range -1 ~ +1
+	void                set_updown(float updown_in) { _updown_in = updown_in; };     // range -1 ~ +1
 
     // for 6DoF vehicles, sets the roll and pitch offset, this rotates the thrust vector in body frame
     virtual void        set_roll_pitch(float roll_deg, float pitch_deg) {};
@@ -297,6 +298,7 @@ protected:
     float               _throttle_out;              // throttle after mixing is complete
     float               _forward_in;                // last forward input from set_forward caller
     float               _lateral_in;                // last lateral input from set_lateral caller
+	float 				_updown_in;					// last updown input from set_updown caller
     float               _throttle_avg_max;          // last throttle input from set_throttle_avg_max
     LowPassFilterFloat  _throttle_filter;           // throttle input filter
     DesiredSpoolState   _spool_desired;             // desired spool state
