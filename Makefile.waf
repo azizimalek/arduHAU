@@ -5,7 +5,7 @@ WAF = $(WAF_BINARY) $(WAF_FLAGS)
 
 EXPLICIT_COMMANDS = check check-all clean list_boards
 
-VEHICLES = copter plane rover
+VEHICLES = copter plane rover hau
 
 all: $(WAF_BINARY)
 	@$(WAF) build
