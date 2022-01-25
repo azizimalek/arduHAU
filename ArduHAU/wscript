@@ -47,3 +47,10 @@ def build(bld):
         use=vehicle + '_libs',
         defines=['FRAME_CONFIG=HELI_FRAME'],
         )
+
+    bld.ap_program(
+        program_name='arduhau',
+        program_groups=['bin', 'hau'],
+        use=vehicle + '_libs',
+        defines=['FRAME_CONFIG=HAU_FRAME'],
+        )
