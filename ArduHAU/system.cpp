@@ -440,7 +440,7 @@ void Copter::allocate_motors(void)
 {
     switch ((AP_Motors::motor_frame_class)g2.frame_class.get()) {
 #if FRAME_CONFIG != HELI_FRAME 
-#if FRAME_CONFIG != HAU_FRAME
+// #if FRAME_CONFIG != HAU_FRAME
         case AP_Motors::MOTOR_FRAME_QUAD:
         case AP_Motors::MOTOR_FRAME_HEXA:
         case AP_Motors::MOTOR_FRAME_Y6:
@@ -483,7 +483,6 @@ case AP_Motors::MOTOR_FRAME_DYNAMIC_SCRIPTING_MATRIX:
             motors_var_info = AP_MotorsMatrix_Scripting_Dynamic::var_info;
 #endif // AP_SCRIPTING_ENABLED
             break;
-#endif
 
 #elif FRAME_CONFIG == HAU_FRAME
     case 1:
