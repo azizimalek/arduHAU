@@ -490,7 +490,7 @@ case AP_Motors::MOTOR_FRAME_DYNAMIC_SCRIPTING_MATRIX:
 #endif // AP_SCRIPTING_ENABLED
             break;
 
-#else FRAME_CONFIG == HELI_FRAME
+#else
         case AP_Motors::MOTOR_FRAME_HELI_DUAL:
             motors = new AP_MotorsHeli_Dual(copter.scheduler.get_loop_rate_hz());
             motors_var_info = AP_MotorsHeli_Dual::var_info;
