@@ -167,3 +167,5 @@ for reviewing patches on their specific area.
 ## Further information ##
 - Refer official ArduPilot GitHub page <https://github.com/ArduPilot/ardupilot/>
 
+## Troubleshooting waf compile error
+- ./Tools/gittools/submodule-sync.sh
