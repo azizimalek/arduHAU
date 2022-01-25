@@ -47,7 +47,8 @@
 // FRAME_CONFIG
 //
 #ifndef FRAME_CONFIG
- # define FRAME_CONFIG   MULTICOPTER_FRAME
+//  # define FRAME_CONFIG   MULTICOPTER_FRAME
+  #define FRAME_CONFIG HAU_FRAME		//uncomment to switch to HAU mode
 #endif
 
 /////////////////////////////////////////////////////////////////////////////////
