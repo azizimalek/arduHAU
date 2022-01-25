@@ -237,7 +237,8 @@ void AP_MotorsHAU::output_min()
 
 int16_t AP_MotorsHAU::calc_thrust_to_pwm(float thrust_in) const
 {
-    return constrain_int16(min_pwm_motor + thrust_in * 500, _throttle_radio_min, _throttle_radio_max);
+    // return constrain_int16(min_pwm_motor + thrust_in * 500, _throttle_radio_min, _throttle_radio_max);
+    return constrain_int16(min_pwm_motor + thrust_in * 500, get_pwm_output_min(), get_pwm_output_max());
 }
 
 int16_t AP_MotorsHAU::calc_angle_to_pwm(float angle_in) const
@@ -334,12 +335,22 @@ void AP_MotorsHAU::output_armed_stabilizing()
         limit.throttle_upper = false;
 
         // sanity check throttle is above zero and below current limited throttle
-        if (throttle_thrust <= -_throttle_thrust_max) {
-            throttle_thrust = -_throttle_thrust_max;
+
+        // if (throttle_thrust <= -_throttle_thrust_max) {
+        //     throttle_thrust = -_throttle_thrust_max;
+        //     limit.throttle_lower = true;
+        // }
+        // if (throttle_thrust >= _throttle_thrust_max) {
+        //     throttle_thrust = _throttle_thrust_max;
+        //     limit.throttle_upper = true;
+        // }
+
+        if (throttle_thrust <= -get_pwm_output_max()) {
+            throttle_thrust = -get_pwm_output_max();
             limit.throttle_lower = true;
         }
-        if (throttle_thrust >= _throttle_thrust_max) {
-            throttle_thrust = _throttle_thrust_max;
+        if (throttle_thrust >= get_pwm_output_max()) {
+            throttle_thrust = get_pwm_output_max();
             limit.throttle_upper = true;
         }
 
