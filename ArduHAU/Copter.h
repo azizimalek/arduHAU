@@ -81,6 +81,8 @@
 
 #if FRAME_CONFIG == HELI_FRAME
  #define MOTOR_CLASS AP_MotorsHeli
+#elif FRAME_CONFIG == HAU_FRAME
+ #define MOTOR_CLASS AP_MotorsHAU
 #else
  #define MOTOR_CLASS AP_MotorsMulticopter
 #endif
