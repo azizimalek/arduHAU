@@ -458,7 +458,6 @@ void Copter::allocate_motors(void)
                 motors = new AP_MotorsMatrix(copter.scheduler.get_loop_rate_hz());
                 motors_var_info = AP_MotorsMatrix::var_info;
                 break;
-            #endif
         case AP_Motors::MOTOR_FRAME_TRI:
             motors = new AP_MotorsTri(copter.scheduler.get_loop_rate_hz());
             motors_var_info = AP_MotorsTri::var_info;
@@ -489,6 +488,7 @@ case AP_Motors::MOTOR_FRAME_DYNAMIC_SCRIPTING_MATRIX:
             motors_var_info = AP_MotorsMatrix_Scripting_Dynamic::var_info;
 #endif // AP_SCRIPTING_ENABLED
             break;
+#endif
 
 #else
         case AP_Motors::MOTOR_FRAME_HELI_DUAL:
