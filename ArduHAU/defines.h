@@ -27,6 +27,7 @@ enum autopilot_yaw_mode {
 #define UNDEFINED_FRAME 0
 #define MULTICOPTER_FRAME 1
 #define HELI_FRAME 2
+#define HAU_FRAME 3
 
 // Tuning enumeration
 enum tuning_func {
