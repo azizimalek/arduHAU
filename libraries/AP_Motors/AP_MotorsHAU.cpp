@@ -266,7 +266,7 @@ void AP_MotorsHAU::output_to_motors()
             }
         }
         break;
-    case SpoolState::SPIN_WHEN_ARMED:
+    case SpoolState::GROUND_IDLE:
         // sends output to motors when armed but not flying
         for (i=0; i<AP_MOTORS_MAX_NUM_MOTORS; i++) {
             if (motor_enabled[i]) {
