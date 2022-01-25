@@ -439,7 +439,7 @@ bool Copter::should_log(uint32_t mask)
 void Copter::allocate_motors(void)
 {
     switch ((AP_Motors::motor_frame_class)g2.frame_class.get()) {
-#if FRAME_CONFIG != HELI_FRAME
+#if FRAME_CONFIG != HELI_FRAME || FRAME_CONFIG != HAU_FRAME
         case AP_Motors::MOTOR_FRAME_QUAD:
         case AP_Motors::MOTOR_FRAME_HEXA:
         case AP_Motors::MOTOR_FRAME_Y6:
@@ -470,6 +470,11 @@ void Copter::allocate_motors(void)
             motors_var_info = AP_MotorsTailsitter::var_info;
             break;
         case AP_Motors::MOTOR_FRAME_6DOF_SCRIPTING:
+
+if FRAME_CONFIG == HAU_FRAME
+    motors = new AP_MotorsHAU(copter.scheduler.get_loop_rate_hz());
+    motors_var_info = AP_MotorsHAU::var_info;
+
 #if AP_SCRIPTING_ENABLED
             motors = new AP_MotorsMatrix_6DoF_Scripting(copter.scheduler.get_loop_rate_hz());
             motors_var_info = AP_MotorsMatrix_6DoF_Scripting::var_info;
