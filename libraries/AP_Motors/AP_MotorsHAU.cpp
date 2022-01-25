@@ -255,8 +255,8 @@ void AP_MotorsHAU::output_to_motors()
     int16_t motor_out[AP_MOTORS_MAX_NUM_MOTORS];    // final pwm values sent to the motor
 	int16_t servo_out[AP_MOTORS_MAX_NUM_MOTORS];    // final pwm values sent to the servo
 	
-    switch (_spool_mode) {
-    case SHUT_DOWN:
+    switch (_spool_state) {
+    case SpoolState::SHUT_DOWN:
         // sends minimum values out to the motors
         // set motor output based on thrust requests
         for (i=0; i<AP_MOTORS_MAX_NUM_MOTORS; i++) {
@@ -266,7 +266,7 @@ void AP_MotorsHAU::output_to_motors()
             }
         }
         break;
-    case SPIN_WHEN_ARMED:
+    case SpoolState::SPIN_WHEN_ARMED:
         // sends output to motors when armed but not flying
         for (i=0; i<AP_MOTORS_MAX_NUM_MOTORS; i++) {
             if (motor_enabled[i]) {
@@ -275,9 +275,9 @@ void AP_MotorsHAU::output_to_motors()
             }
         }
         break;
-    case SPOOL_UP:
-    case THROTTLE_UNLIMITED:
-    case SPOOL_DOWN:
+    case SpoolState::SPOOL_UP:
+    case SpoolState::THROTTLE_UNLIMITED:
+    case SpoolState::SPOOL_DOWN:
         // set motor output based on thrust requests
         for (i=0; i<AP_MOTORS_MAX_NUM_MOTORS; i++) {
             if (motor_enabled[i]) {
