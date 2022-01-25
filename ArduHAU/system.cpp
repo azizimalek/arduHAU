@@ -450,9 +450,15 @@ void Copter::allocate_motors(void)
         case AP_Motors::MOTOR_FRAME_DECA:
         case AP_Motors::MOTOR_FRAME_SCRIPTING_MATRIX:
         default:
-            motors = new AP_MotorsMatrix(copter.scheduler.get_loop_rate_hz());
-            motors_var_info = AP_MotorsMatrix::var_info;
-            break;
+            #if FRAME_CONFIG == HAU_FRAME
+                motors = new AP_MotorsHAU(copter.scheduler.get_loop_rate_hz());
+                motors_var_info = AP_MotorsHAU::var_info;
+                break;
+            #else 
+                motors = new AP_MotorsMatrix(copter.scheduler.get_loop_rate_hz());
+                motors_var_info = AP_MotorsMatrix::var_info;
+                break;
+            #endif
         case AP_Motors::MOTOR_FRAME_TRI:
             motors = new AP_MotorsTri(copter.scheduler.get_loop_rate_hz());
             motors_var_info = AP_MotorsTri::var_info;
@@ -484,13 +490,7 @@ case AP_Motors::MOTOR_FRAME_DYNAMIC_SCRIPTING_MATRIX:
 #endif // AP_SCRIPTING_ENABLED
             break;
 
-#elif FRAME_CONFIG == HAU_FRAME
-    case 1:
-        motors = new AP_MotorsHAU(copter.scheduler.get_loop_rate_hz());
-        motors_var_info = AP_MotorsHAU::var_info;
-        break;
-
-#elif FRAME_CONFIG == HELI_FRAME
+#else FRAME_CONFIG == HELI_FRAME
         case AP_Motors::MOTOR_FRAME_HELI_DUAL:
             motors = new AP_MotorsHeli_Dual(copter.scheduler.get_loop_rate_hz());
             motors_var_info = AP_MotorsHeli_Dual::var_info;
