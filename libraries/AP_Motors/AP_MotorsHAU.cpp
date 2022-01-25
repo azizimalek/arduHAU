@@ -275,9 +275,9 @@ void AP_MotorsHAU::output_to_motors()
             }
         }
         break;
-    case SpoolState::SPOOL_UP:
+    case SpoolState::SPOOLING_UP:
     case SpoolState::THROTTLE_UNLIMITED:
-    case SpoolState::SPOOL_DOWN:
+    case SpoolState::SPOOLING_DOWN:
         // set motor output based on thrust requests
         for (i=0; i<AP_MOTORS_MAX_NUM_MOTORS; i++) {
             if (motor_enabled[i]) {
