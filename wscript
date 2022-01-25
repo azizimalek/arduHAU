@@ -574,7 +574,7 @@ def generate_tasklist(ctx, do_print=True):
                 elif 'linux' in board:
                     task['targets'] = ['antennatracker', 'copter', 'heli', 'plane', 'rover', 'sub']
                 else:
-                    task['targets'] = ['antennatracker', 'copter', 'heli', 'plane', 'rover', 'sub', 'bootloader']
+                    task['targets'] = ['antennatracker', 'copter', 'heli', 'plane', 'rover', 'sub', 'bootloader','hau']
                     task['buildOptions'] = '--upload'
             tasks.append(task)
         tlist.write(json.dumps(tasks))
