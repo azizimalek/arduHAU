@@ -146,7 +146,8 @@ void AP_MotorsHAU::setup_motors(motor_frame_class frame_class, motor_frame_type 
     //float s2_angle = 90.0 +  angle_compensation*atan((-mtHAU.tRoll - mtHAU.tPitch - mtHAU.tUp + mtHAU.tDown)/(1.1+mtHAU.tYaw + (mtHAU.tBackward) - mtHAU.tRoll - mtHAU.tPitch - mtHAU.tUp + mtHAU.tDown))*180/3.142;
     //float s3_angle = 90.0 +  angle_compensation*atan((-mtHAU.tRoll + mtHAU.tPitch - mtHAU.tUp + mtHAU.tDown)/(1.1-mtHAU.tYaw + (mtHAU.tForward) - mtHAU.tRoll + mtHAU.tPitch - mtHAU.tUp + mtHAU.tDown))*180/3.142;
     //float s4_angle = 90.0 +  angle_compensation*atan((mtHAU.tRoll - mtHAU.tPitch - mtHAU.tUp + mtHAU.tDown)/(1.1-mtHAU.tYaw + (mtHAU.tBackward) + mtHAU.tRoll - mtHAU.tPitch - mtHAU.tUp + mtHAU.tDown))*180/3.142; 
-	_flags.initialised_ok = true;
+	// _flags.initialised_ok = true;
+    set_initialised_ok(true);
 }
 
 // add_servo - quick solution to use servo from motor output library
