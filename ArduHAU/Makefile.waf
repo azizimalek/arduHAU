@@ -1,2 +1,2 @@
 all:
-	@$(MAKE) -C ../ -f Makefile.waf hau
+	@$(MAKE) -C ../ -f Makefile.waf copter

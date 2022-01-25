@@ -39,15 +39,6 @@
 #error CONFIG_HAL_BOARD must be defined to build ArduCopter
 #endif
 
-//////////////////////////////////////////////////////////////////////////////
-// HIL_MODE                                 OPTIONAL
-
-#ifndef HIL_MODE
- #define HIL_MODE        HIL_MODE_DISABLED
-#endif
-
-#define MAGNETOMETER ENABLED
-
 #ifndef ARMING_DELAY_SEC
     # define ARMING_DELAY_SEC 2.0f
 #endif
@@ -64,9 +55,7 @@
 #if FRAME_CONFIG == HELI_FRAME
   # define RC_FAST_SPEED                        125
   # define WP_YAW_BEHAVIOR_DEFAULT              WP_YAW_BEHAVIOR_LOOK_AHEAD
-  # define THR_MIN_DEFAULT                      0
   # define AUTOTUNE_ENABLED                     DISABLED
-  # define ACCEL_Z_P                            0.30f
 #endif
 
 //////////////////////////////////////////////////////////////////////////////
@@ -88,20 +77,20 @@
  # define RANGEFINDER_HEALTH_MAX 3          // number of good reads that indicates a healthy rangefinder
 #endif
 
-#ifndef RANGEFINDER_GAIN_DEFAULT
- # define RANGEFINDER_GAIN_DEFAULT 0.8f     // gain for controlling how quickly rangefinder range adjusts target altitude (lower means slower reaction)
-#endif
-
-#ifndef THR_SURFACE_TRACKING_VELZ_MAX
- # define THR_SURFACE_TRACKING_VELZ_MAX 150 // max vertical speed change while surface tracking with rangefinder
-#endif
-
 #ifndef RANGEFINDER_TIMEOUT_MS
- # define RANGEFINDER_TIMEOUT_MS  1000      // desired rangefinder alt will reset to current rangefinder alt after this many milliseconds without a good rangefinder alt
+# define RANGEFINDER_TIMEOUT_MS 1000        // rangefinder filter reset if no updates from sensor in 1 second
 #endif
 
-#ifndef RANGEFINDER_WPNAV_FILT_HZ
- # define RANGEFINDER_WPNAV_FILT_HZ   0.25f // filter frequency for rangefinder altitude provided to waypoint navigation class
+#ifndef RANGEFINDER_FILT_DEFAULT
+ # define RANGEFINDER_FILT_DEFAULT 0.5f     // filter for rangefinder distance
+#endif
+
+#ifndef SURFACE_TRACKING_VELZ_MAX
+ # define SURFACE_TRACKING_VELZ_MAX 150     // max vertical speed change while surface tracking with rangefinder
+#endif
+
+#ifndef SURFACE_TRACKING_TIMEOUT_MS
+ # define SURFACE_TRACKING_TIMEOUT_MS  1000 // surface tracking target alt will reset to current rangefinder alt after this many milliseconds without a good rangefinder alt
 #endif
 
 #ifndef RANGEFINDER_TILT_CORRECTION         // by disable tilt correction for use of range finder data by EKF
@@ -114,13 +103,6 @@
 
 #ifndef RANGEFINDER_GLITCH_NUM_SAMPLES
  # define RANGEFINDER_GLITCH_NUM_SAMPLES  3   // number of rangefinder glitches in a row to take new reading
-#endif
-
-//////////////////////////////////////////////////////////////////////////////
-// Proximity sensor
-//
-#ifndef PROXIMITY_ENABLED
- # define PROXIMITY_ENABLED ENABLED
 #endif
 
 #ifndef MAV_SYSTEM_ID
@@ -148,9 +130,6 @@
 #ifndef FS_GCS
  # define FS_GCS                        DISABLED
 #endif
-#ifndef FS_GCS_TIMEOUT_MS
- # define FS_GCS_TIMEOUT_MS             5000    // gcs failsafe triggers after 5 seconds with no GCS heartbeat
-#endif
 
 // Radio failsafe while using RC_override
 #ifndef FS_RADIO_RC_OVERRIDE_TIMEOUT_MS
@@ -159,7 +138,7 @@
 
 // Radio failsafe
 #ifndef FS_RADIO_TIMEOUT_MS
- #define FS_RADIO_TIMEOUT_MS            500     // RC Radio Failsafe triggers after 500 miliseconds with No RC Input
+ #define FS_RADIO_TIMEOUT_MS            500     // RC Radio Failsafe triggers after 500 milliseconds with No RC Input
 #endif
 
 // missing terrain data failsafe
@@ -185,30 +164,8 @@
  # define FS_EKF_THRESHOLD_DEFAULT      0.8f    // EKF failsafe's default compass and velocity variance threshold above which the EKF failsafe will be triggered
 #endif
 
-#ifndef EKF_ORIGIN_MAX_DIST_M
- # define EKF_ORIGIN_MAX_DIST_M         50000   // EKF origin and waypoints (including home) must be within 50km
-#endif
-
-//////////////////////////////////////////////////////////////////////////////
-//  MAGNETOMETER
-#ifndef MAGNETOMETER
- # define MAGNETOMETER                   ENABLED
-#endif
-
-#ifndef COMPASS_CAL_STICK_GESTURE_TIME
- #define COMPASS_CAL_STICK_GESTURE_TIME 2.0f // 2 seconds
-#endif
-#ifndef COMPASS_CAL_STICK_DELAY
- #define COMPASS_CAL_STICK_DELAY 5.0f
-#endif
-
-//////////////////////////////////////////////////////////////////////////////
-//  OPTICAL_FLOW & VISUAL ODOMETRY
-#ifndef OPTFLOW
- # define OPTFLOW       ENABLED
-#endif
-#ifndef VISUAL_ODOMETRY_ENABLED
-# define VISUAL_ODOMETRY_ENABLED !HAL_MINIMIZE_FEATURES
+#ifndef EKF_ORIGIN_MAX_ALT_KM
+ # define EKF_ORIGIN_MAX_ALT_KM         50   // EKF origin and home must be within 50km vertically
 #endif
 
 //////////////////////////////////////////////////////////////////////////////
@@ -219,8 +176,8 @@
 
 //////////////////////////////////////////////////////////////////////////////
 //  Crop Sprayer - enabled only on larger firmwares
-#ifndef SPRAYER
- # define SPRAYER  !HAL_MINIMIZE_FEATURES
+#ifndef SPRAYER_ENABLED
+ # define SPRAYER_ENABLED  HAL_SPRAYER_ENABLED
 #endif
 
 //////////////////////////////////////////////////////////////////////////////
@@ -236,7 +193,7 @@
 #endif
 
 //////////////////////////////////////////////////////////////////////////////
-// winch support - enabled only on larger firmwares
+// winch support
 #ifndef WINCH_ENABLED
 # define WINCH_ENABLED !HAL_MINIMIZE_FEATURES
 #endif
@@ -244,19 +201,13 @@
 //////////////////////////////////////////////////////////////////////////////
 // rotations per minute sensor support
 #ifndef RPM_ENABLED
-# define RPM_ENABLED ENABLED
+ # define RPM_ENABLED !HAL_MINIMIZE_FEATURES
 #endif
 
 //////////////////////////////////////////////////////////////////////////////
 // Parachute release
 #ifndef PARACHUTE
- # define PARACHUTE ENABLED
-#endif
-
-//////////////////////////////////////////////////////////////////////////////
-// ADSB support
-#ifndef ADSB_ENABLED
-# define ADSB_ENABLED !HAL_MINIMIZE_FEATURES
+ # define PARACHUTE HAL_PARACHUTE_ENABLED
 #endif
 
 //////////////////////////////////////////////////////////////////////////////
@@ -296,6 +247,12 @@
 #endif
 
 //////////////////////////////////////////////////////////////////////////////
+// flip - fly vehicle in flip in pitch and roll direction mode
+#ifndef MODE_FLIP_ENABLED
+# define MODE_FLIP_ENABLED ENABLED
+#endif
+
+//////////////////////////////////////////////////////////////////////////////
 // Follow - follow another vehicle or GCS
 #ifndef MODE_FOLLOW_ENABLED
 # define MODE_FOLLOW_ENABLED !HAL_MINIMIZE_FEATURES
@@ -310,7 +267,7 @@
 //////////////////////////////////////////////////////////////////////////////
 // GuidedNoGPS mode - control vehicle's angles from GCS
 #ifndef MODE_GUIDED_NOGPS_ENABLED
-# define MODE_GUIDED_NOGPS_ENABLED ENABLED
+# define MODE_GUIDED_NOGPS_ENABLED !HAL_MINIMIZE_FEATURES
 #endif
 
 //////////////////////////////////////////////////////////////////////////////
@@ -344,15 +301,55 @@
 #endif
 
 //////////////////////////////////////////////////////////////////////////////
+// System ID - conduct system identification tests on vehicle
+#ifndef MODE_SYSTEMID_ENABLED
+# define MODE_SYSTEMID_ENABLED !HAL_MINIMIZE_FEATURES
+#endif
+
+//////////////////////////////////////////////////////////////////////////////
 // Throw - fly vehicle after throwing it in the air
 #ifndef MODE_THROW_ENABLED
 # define MODE_THROW_ENABLED ENABLED
 #endif
 
 //////////////////////////////////////////////////////////////////////////////
+// ZigZag - allow vehicle to fly in a zigzag manner with predefined point A B
+#ifndef MODE_ZIGZAG_ENABLED
+# define MODE_ZIGZAG_ENABLED !HAL_MINIMIZE_FEATURES
+#endif
+
+//////////////////////////////////////////////////////////////////////////////
+// Turtle - allow vehicle to be flipped over after a crash
+#ifndef MODE_TURTLE_ENABLED
+# define MODE_TURTLE_ENABLED !HAL_MINIMIZE_FEATURES && !defined(DISABLE_DSHOT) && FRAME_CONFIG != HELI_FRAME
+#endif
+
+//////////////////////////////////////////////////////////////////////////////
+
+//////////////////////////////////////////////////////////////////////////////
+// Autorotate - autonomous auto-rotation - helicopters only
+#if CONFIG_HAL_BOARD == HAL_BOARD_SITL
+    #if FRAME_CONFIG == HELI_FRAME
+        #ifndef MODE_AUTOROTATE_ENABLED
+        # define MODE_AUTOROTATE_ENABLED !HAL_MINIMIZE_FEATURES
+        #endif
+    #else
+        # define MODE_AUTOROTATE_ENABLED DISABLED
+    #endif
+#else
+    # define MODE_AUTOROTATE_ENABLED DISABLED
+#endif
+//////////////////////////////////////////////////////////////////////////////
+
 // Beacon support - support for local positioning systems
 #ifndef BEACON_ENABLED
 # define BEACON_ENABLED !HAL_MINIMIZE_FEATURES
+#endif
+
+//////////////////////////////////////////////////////////////////////////////
+// Landing Gear support
+#ifndef LANDING_GEAR_ENABLED
+ #define LANDING_GEAR_ENABLED ENABLED
 #endif
 
 //////////////////////////////////////////////////////////////////////////////
@@ -366,22 +363,22 @@
 //
 
 #ifndef FLIGHT_MODE_1
- # define FLIGHT_MODE_1                  STABILIZE
+ # define FLIGHT_MODE_1                  Mode::Number::STABILIZE
 #endif
 #ifndef FLIGHT_MODE_2
- # define FLIGHT_MODE_2                  STABILIZE
+ # define FLIGHT_MODE_2                  Mode::Number::STABILIZE
 #endif
 #ifndef FLIGHT_MODE_3
- # define FLIGHT_MODE_3                  STABILIZE
+ # define FLIGHT_MODE_3                  Mode::Number::STABILIZE
 #endif
 #ifndef FLIGHT_MODE_4
- # define FLIGHT_MODE_4                  STABILIZE
+ # define FLIGHT_MODE_4                  Mode::Number::STABILIZE
 #endif
 #ifndef FLIGHT_MODE_5
- # define FLIGHT_MODE_5                  STABILIZE
+ # define FLIGHT_MODE_5                  Mode::Number::STABILIZE
 #endif
 #ifndef FLIGHT_MODE_6
- # define FLIGHT_MODE_6                  STABILIZE
+ # define FLIGHT_MODE_6                  Mode::Number::STABILIZE
 #endif
 
 
@@ -443,28 +440,16 @@
 #endif
 
 //////////////////////////////////////////////////////////////////////////////
-// MOUNT (ANTENNA OR CAMERA)
-//
-#ifndef MOUNT
- # define MOUNT         ENABLED
-#endif
-
-
-//////////////////////////////////////////////////////////////////////////////
 // Flight mode definitions
 //
 
 // Acro Mode
-#ifndef ACRO_RP_P
- # define ACRO_RP_P                 4.5f
-#endif
-
-#ifndef ACRO_YAW_P
- # define ACRO_YAW_P                4.5f
-#endif
-
 #ifndef ACRO_LEVEL_MAX_ANGLE
- # define ACRO_LEVEL_MAX_ANGLE      3000
+ # define ACRO_LEVEL_MAX_ANGLE      3000 // maximum lean angle in trainer mode measured in centidegrees
+#endif
+
+#ifndef ACRO_LEVEL_MAX_OVERSHOOT
+ # define ACRO_LEVEL_MAX_OVERSHOOT  1000 // maximum overshoot angle in trainer mode when full roll or pitch stick is held in centidegrees
 #endif
 
 #ifndef ACRO_BALANCE_ROLL
@@ -476,24 +461,32 @@
 #endif
 
 #ifndef ACRO_RP_EXPO_DEFAULT
- #define ACRO_RP_EXPO_DEFAULT       0.3f
+ #define ACRO_RP_EXPO_DEFAULT       0.3f    // ACRO roll and pitch expo parameter default
 #endif
 
 #ifndef ACRO_Y_EXPO_DEFAULT
- #define ACRO_Y_EXPO_DEFAULT        0.0f
+ #define ACRO_Y_EXPO_DEFAULT        0.0f    // ACRO yaw expo parameter default
 #endif
 
 #ifndef ACRO_THR_MID_DEFAULT
  #define ACRO_THR_MID_DEFAULT       0.0f
 #endif
 
+#ifndef ACRO_RP_RATE_DEFAULT
+ #define ACRO_RP_RATE_DEFAULT      360      // ACRO roll and pitch rotation rate parameter default in deg/s
+#endif
+
+#ifndef ACRO_Y_RATE_DEFAULT
+ #define ACRO_Y_RATE_DEFAULT       202.5    // ACRO yaw rotation rate parameter default in deg/s
+#endif
+
 // RTL Mode
 #ifndef RTL_ALT_FINAL
- # define RTL_ALT_FINAL             0       // the altitude the vehicle will move to as the final stage of Returning to Launch.  Set to zero to land.
+ # define RTL_ALT_FINAL             0       // the altitude, in cm, the vehicle will move to as the final stage of Returning to Launch.  Set to zero to land.
 #endif
 
 #ifndef RTL_ALT
- # define RTL_ALT 				    1500    // default alt to return to home in cm, 0 = Maintain current altitude
+ # define RTL_ALT                   1500    // default alt to return to home in cm, 0 = Maintain current altitude
 #endif
 
 #ifndef RTL_ALT_MIN
@@ -525,10 +518,6 @@
  # define WP_YAW_BEHAVIOR_DEFAULT   WP_YAW_BEHAVIOR_LOOK_AT_NEXT_WP_EXCEPT_RTL
 #endif
 
-#ifndef AUTO_YAW_SLEW_RATE
- # define AUTO_YAW_SLEW_RATE    60              // degrees/sec
-#endif
-
 #ifndef YAW_LOOK_AHEAD_MIN_SPEED
  # define YAW_LOOK_AHEAD_MIN_SPEED  100             // minimum ground speed in cm/s required before copter is aimed at ground course
 #endif
@@ -545,10 +534,7 @@
  # define ROLL_PITCH_YAW_INPUT_MAX      4500        // roll, pitch and yaw input range
 #endif
 #ifndef DEFAULT_ANGLE_MAX
- # define DEFAULT_ANGLE_MAX         4500            // ANGLE_MAX parameters default value
-#endif
-#ifndef ANGLE_RATE_MAX
- # define ANGLE_RATE_MAX            18000           // default maximum rotation rate in roll/pitch axis requested by angle controller used in stabilize, loiter, rtl, auto flight modes
+ # define DEFAULT_ANGLE_MAX         3000            // ANGLE_MAX parameters default value
 #endif
 
 //////////////////////////////////////////////////////////////////////////////
@@ -572,7 +558,7 @@
 #endif
 
 //////////////////////////////////////////////////////////////////////////////
-// Throttle control defaults
+// Pilot control defaults
 //
 
 #ifndef THR_DZ_DEFAULT
@@ -587,13 +573,11 @@
  # define PILOT_ACCEL_Z_DEFAULT 250 // vertical acceleration in cm/s/s while altitude is under pilot control
 #endif
 
-// max distance in cm above or below current location that will be used for the alt target when transitioning to alt-hold mode
-#ifndef ALT_HOLD_INIT_MAX_OVERSHOOT
- # define ALT_HOLD_INIT_MAX_OVERSHOOT 200
+#ifndef PILOT_Y_RATE_DEFAULT
+ # define PILOT_Y_RATE_DEFAULT  202.5   // yaw rotation rate parameter default in deg/s for all mode except ACRO
 #endif
-// the acceleration used to define the distance-velocity curve
-#ifndef ALT_HOLD_ACCEL_MAX
- # define ALT_HOLD_ACCEL_MAX 250    // if you change this you must also update the duplicate declaration in AC_WPNav.h
+#ifndef PILOT_Y_EXPO_DEFAULT
+ # define PILOT_Y_EXPO_DEFAULT  0.0     // yaw expo parameter default for all mode except ACRO
 #endif
 
 #ifndef AUTO_DISARMING_DELAY
@@ -611,7 +595,7 @@
 #endif
 
 //////////////////////////////////////////////////////////////////////////////
-// Dataflash logging control
+// Logging control
 //
 #ifndef LOGGING_ENABLED
  # define LOGGING_ENABLED                ENABLED
@@ -649,11 +633,7 @@
  #define AC_RALLY   ENABLED
 #endif
 
-#ifndef AC_TERRAIN
- #define AC_TERRAIN ENABLED
-#endif
-
-#if AC_TERRAIN && !AC_RALLY
+#if AP_TERRAIN_AVAILABLE && !AC_RALLY
  #error Terrain relies on Rally which is disabled
 #endif
 
@@ -661,9 +641,10 @@
  #define AC_AVOID_ENABLED   ENABLED
 #endif
 
-#if AC_AVOID_ENABLED && !PROXIMITY_ENABLED
-  #error AC_Avoidance relies on PROXIMITY_ENABLED which is disabled
+#ifndef AC_OAPATHPLANNER_ENABLED
+ #define AC_OAPATHPLANNER_ENABLED   !HAL_MINIMIZE_FEATURES
 #endif
+
 #if AC_AVOID_ENABLED && !AC_FENCE
   #error AC_Avoidance relies on AC_FENCE which is disabled
 #endif
@@ -684,12 +665,28 @@
   #error ModeAuto requires ModeRTL which is disabled
 #endif
 
-#if AC_TERRAIN && !MODE_AUTO_ENABLED
+#if AP_TERRAIN_AVAILABLE && !MODE_AUTO_ENABLED
   #error Terrain requires ModeAuto which is disabled
 #endif
 
 #if FRAME_CONFIG == HELI_FRAME && !MODE_ACRO_ENABLED
   #error Helicopter frame requires acro mode support which is disabled
+#endif
+
+#if MODE_SMARTRTL_ENABLED && !MODE_RTL_ENABLED
+  #error SmartRTL requires ModeRTL which is disabled
+#endif
+
+#if HAL_ADSB_ENABLED && !MODE_GUIDED_ENABLED
+  #error ADSB requires ModeGuided which is disabled
+#endif
+
+#if MODE_FOLLOW_ENABLED && !MODE_GUIDED_ENABLED
+  #error Follow requires ModeGuided which is disabled
+#endif
+
+#if MODE_GUIDED_NOGPS_ENABLED && !MODE_GUIDED_ENABLED
+  #error ModeGuided-NoGPS requires ModeGuided which is disabled
 #endif
 
 //////////////////////////////////////////////////////////////////////////////
@@ -721,10 +718,10 @@
  # define STATS_ENABLED ENABLED
 #endif
 
-#ifndef DEVO_TELEM_ENABLED
-#if HAL_MINIMIZE_FEATURES
- #define DEVO_TELEM_ENABLED DISABLED
-#else
- #define DEVO_TELEM_ENABLED ENABLED
+#ifndef OSD_ENABLED
+ #define OSD_ENABLED DISABLED
 #endif
+
+#ifndef HAL_FRAME_TYPE_DEFAULT
+#define HAL_FRAME_TYPE_DEFAULT AP_Motors::MOTOR_FRAME_TYPE_X
 #endif
