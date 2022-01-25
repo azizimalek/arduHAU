@@ -471,7 +471,7 @@ void Copter::allocate_motors(void)
             break;
         case AP_Motors::MOTOR_FRAME_6DOF_SCRIPTING:
 
-if FRAME_CONFIG == HAU_FRAME
+#if FRAME_CONFIG == HAU_FRAME
     motors = new AP_MotorsHAU(copter.scheduler.get_loop_rate_hz());
     motors_var_info = AP_MotorsHAU::var_info;
 
