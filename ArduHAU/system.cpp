@@ -483,7 +483,6 @@ case AP_Motors::MOTOR_FRAME_DYNAMIC_SCRIPTING_MATRIX:
             motors_var_info = AP_MotorsMatrix_Scripting_Dynamic::var_info;
 #endif // AP_SCRIPTING_ENABLED
             break;
-#endif
 
 #elif FRAME_CONFIG == HAU_FRAME //for HAU 
 		case 1:
