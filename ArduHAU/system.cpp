@@ -439,7 +439,7 @@ bool Copter::should_log(uint32_t mask)
 void Copter::allocate_motors(void)
 {
     switch ((AP_Motors::motor_frame_class)g2.frame_class.get()) {
-#if FRAME_CONFIG != HELI_FRAME 
+#if FRAME_CONFIG == MULTICOPTER_FRAME //!= HELI_FRAME 
 // #if FRAME_CONFIG != HAU_FRAME
         case AP_Motors::MOTOR_FRAME_QUAD:
         case AP_Motors::MOTOR_FRAME_HEXA:
